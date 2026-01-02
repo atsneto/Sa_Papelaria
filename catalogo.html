@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Completo | SÁ Papelaria</title>
+    <meta name="description" content="Confira o catálogo completo de produtos da SÁ Papelaria. Agendas, produtos para festas, cartão do SUS, bíblicos e muito mais.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="topbar">Impressão impecável, atendimento acolhedor e entrega rápida.</div>
+        <div class="nav-container container">
+            <div class="logo-area">
+                <img src="IMG/logo.png" alt="SÁ Papelaria" class="logo-img">
+                <span class="logo-text">SÁ Papelaria</span>
+            </div>
+            <nav class="nav" id="navMenu">
+                <a href="index.html#home">Home</a>
+                <a href="catalogo.html">Catálogo</a>
+                <a href="index.html#blog">Blog</a>
+                <a href="index.html#contato">Contato</a>
+            </nav>
+            <button class="menu-toggle" aria-label="Abrir menu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalogo-page">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Catálogo Completo</p>
+                    <h1>Todos os Produtos</h1>
+                    <p>Encontre exatamente o que você procura</p>
+                </div>
+
+                <div class="catalogo-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar produtos..." class="search-input">
+                    </div>
+                    <div class="filtros">
+                        <button class="filtro active" data-category="all">Todos</button>
+                        <button class="filtro" data-category="agendas">Agendas</button>
+                        <button class="filtro" data-category="topo-bolo">Topo de Bolo</button>
+                        <button class="filtro" data-category="festas">Festas</button>
+                        <button class="filtro" data-category="cartao-sus">Cartão do SUS</button>
+                        <button class="filtro" data-category="biblicos">Bíblicos</button>
+                        <button class="filtro" data-category="escolares">Escolares</button>
+                    </div>
+                </div>
+
+                <div class="produtos-grid" id="produtosGrid"></div>
+            </div>
+        </section>
+
+        <section class="contato" id="contato">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Contato</p>
+                    <h2>Fale com a gente</h2>
+                    <p>Entre em contato pelos nossos canais</p>
+                </div>
+                <div class="contato-buttons">
+                    <a href="https://wa.me/5584996208075?text=Ol%C3%A1%20S%C3%81%20Papelaria!%20Quero%20um%20or%C3%A7amento." target="_blank" class="contato-card">
+                        <img src="IMG/whatsapp.png" alt="WhatsApp" class="contato-icon">
+                        <h3>WhatsApp</h3>
+                        <p>Converse conosco agora</p>
+                    </a>
+                    <a href="https://instagram.com/sapapelaria" target="_blank" class="contato-card">
+                        <img src="IMG/instagram.png" alt="Instagram" class="contato-icon">
+                        <h3>Instagram</h3>
+                        <p>Siga-nos no Instagram</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contato">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__info">
+                    <h3 class="footer__title">Nossas Redes</h3>
+                    <div class="footer__social">
+                        <a href="https://www.instagram.com/sapapelaria/" target="_blank" rel="noopener" aria-label="Instagram" class="footer__social-link">
+                            <img src="IMG/instagram.png" alt="Instagram">
+                        </a>
+                        <a href="https://wa.me/5584996208075" target="_blank" rel="noopener" aria-label="WhatsApp" class="footer__social-link">
+                            <img src="IMG/whatsapp.png" alt="WhatsApp">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__links">
+                    <h4 class="footer__links-title">Navegação</h4>
+                    <ul class="footer__links-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalogo.html">Catálogo</a></li>
+                        <li><a href="index.html#blog">Blog</a></li>
+                        <li><a href="index.html#contato">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__links">
+                    <h4 class="footer__links-title">Produtos</h4>
+                    <ul class="footer__links-list">
+                        <li><a href="catalogo.html">Ver Catálogo</a></li>
+                        <li><a href="catalogo.html">Planners</a></li>
+                        <li><a href="catalogo.html">Personalizados</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__contact">
+                    <h4 class="footer__links-title">Contato</h4>
+                    <p class="footer__contact-item">@sapapelaria</p>
+                    <p class="footer__contact-item">+55 84 99620-8075</p>
+                    <p class="footer__contact-item">Natal - RN</p>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>&copy; 2025 SÁ Papelaria. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="whatsapp-float">
+        <a href="https://wa.me/5584996208075?text=Ol%C3%A1%20S%C3%81%20Papelaria!%20Quero%20um%20or%C3%A7amento." target="_blank" aria-label="Abrir WhatsApp">
+            <img src="IMG/whatsapp.png" alt="WhatsApp">
+        </a>
+    </div>
+
+    <div class="modal" id="produtoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="modal-body">
+                <div class="modal-gallery-container">
+                    <button class="carousel-btn prev" onclick="prevImage()" id="prevBtn" aria-label="Anterior">‹</button>
+                    <div class="modal-gallery" id="modalGallery"></div>
+                    <button class="carousel-btn next" onclick="nextImage()" id="nextBtn" aria-label="Próxima">›</button>
+                    <div class="carousel-indicators" id="carouselIndicators"></div>
+                </div>
+                <div class="modal-info">
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalDesc"></p>
+                    <ul id="modalSpecs" class="modal-specs"></ul>
+                    <a id="modalCTA" class="btn primary" target="_blank">Pedir orçamento pelo WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="JS/supabase-config.js"></script>    <script src="JS/script.js"></script>
+    <script src="JS/catalogo.js"></script>
+</body>
+</html>

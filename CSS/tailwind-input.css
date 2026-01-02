@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scrollbar invisível para o modal */
+#modalContent {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+#modalContent::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | SÁ Papelaria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/tailwind-output.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-pink-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="bg-gradient-to-r from-rosa to-pink-500 text-white text-center py-2 text-xs sm:text-sm font-medium px-2">
+            Painel Administrativo - SÁ Papelaria
+        </div>
+        <div class="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-rosa" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">Admin Panel</span>
+            </div>
+            <a href="index.html" class="flex items-center gap-1 sm:gap-2 text-gray-600 hover:text-rosa transition-colors text-sm sm:text-base">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span class="hidden sm:inline">Voltar ao Site</span>
+                <span class="sm:hidden">Voltar</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <!-- Header com título e botão -->
+        <div class="bg-gradient-to-r from-rosa to-pink-500 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 sm:w-64 sm:h-64 bg-white opacity-10 rounded-full -mr-16 sm:-mr-32 -mt-16 sm:-mt-32"></div>
+            <div class="relative z-10 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+                <div class="text-center sm:text-left w-full sm:w-auto">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">Gerenciar Produtos</h1>
+                    <p class="text-pink-100 text-sm sm:text-base">Adicione, edite ou remova produtos do catálogo</p>
+                </div>
+                <button onclick="abrirModalAdicionar()" class="bg-white text-rosa px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-bold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2 w-full sm:w-auto justify-center text-sm sm:text-base whitespace-nowrap">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Novo Produto
+                </button>
+            </div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
+            <div id="loading" class="p-6 sm:p-12 text-center">
+                <div class="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-rosa"></div>
+                <p class="mt-3 sm:mt-4 text-gray-600 text-sm sm:text-base">Carregando produtos...</p>
+            </div>
+            
+            <div id="produtosTable" class="hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gradient-to-r from-rosa to-pink-500 text-white">
+                            <tr>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-bold uppercase tracking-wider">Imagem</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-bold uppercase tracking-wider">Nome</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-bold uppercase tracking-wider hidden md:table-cell">Categoria</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-bold uppercase tracking-wider hidden lg:table-cell">Preço</th>
+                                <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm font-bold uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="produtosTbody" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="produtoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-2 sm:p-4 backdrop-blur-sm" onclick="fecharModalBackground(event)">
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-3xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+            <!-- Header do Modal -->
+            <div class="sticky top-0 bg-gradient-to-r from-rosa to-pink-500 text-white px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 rounded-t-2xl sm:rounded-t-3xl flex justify-between items-center z-10">
+                <h2 id="modalTitle" class="text-lg sm:text-xl md:text-2xl font-bold">Novo Produto</h2>
+                <button onclick="fecharModal()" class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1.5 sm:p-2 transition-all">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Formulário -->
+            <form id="produtoForm" onsubmit="salvarProduto(event)" class="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Nome do Produto *</label>
+                        <input type="text" id="nome" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-rosa focus:ring-4 focus:ring-rosa focus:ring-opacity-20 transition-all outline-none text-sm sm:text-base">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Categoria *</label>
+                        <select id="categoria" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-rosa focus:ring-4 focus:ring-rosa focus:ring-opacity-20 transition-all outline-none text-sm sm:text-base">
+                            <option value="">Selecione...</option>
+                            <option value="agendas">Agendas</option>
+                            <option value="topo-bolo">Topo de Bolo</option>
+                            <option value="festas">Festas</option>
+                            <option value="cartao-sus">Cartão do SUS</option>
+                            <option value="biblicos">Bíblicos</option>
+                            <option value="escolares">Escolares</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Preço *</label>
+                    <input type="text" id="preco" placeholder="Ex: A partir de R$ 45,00" required class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-rosa focus:ring-4 focus:ring-rosa focus:ring-opacity-20 transition-all outline-none text-sm sm:text-base">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Descrição</label>
+                    <textarea id="descricao" rows="3" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-rosa focus:ring-4 focus:ring-rosa focus:ring-opacity-20 transition-all outline-none resize-none text-sm sm:text-base"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Imagem Principal *</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl p-4 sm:p-6 text-center hover:border-rosa transition-colors">
+                        <input type="file" id="imgFile" accept="image/*" onchange="previewImagem(this, 'imgPreview')" class="hidden" required>
+                        <button type="button" onclick="document.getElementById('imgFile').click()" class="bg-rosa-suave text-rosa px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-rosa hover:text-white transition-all text-sm sm:text-base">
+                            📷 Escolher Imagem Principal
+                        </button>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-2">Formatos aceitos: JPG, PNG, WebP</p>
+                        <div id="imgPreview" class="mt-3 sm:mt-4"></div>
+                    </div>
+                    <input type="hidden" id="img">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Galeria de Imagens</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg sm:rounded-xl p-4 sm:p-6 text-center hover:border-rosa transition-colors">
+                        <input type="file" id="galeriaFiles" accept="image/*" multiple onchange="previewGaleria(this)" class="hidden">
+                        <button type="button" onclick="document.getElementById('galeriaFiles').click()" class="bg-rosa-suave text-rosa px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-rosa hover:text-white transition-all text-sm sm:text-base">
+                            🖼️ Escolher Múltiplas Imagens
+                        </button>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-2">Selecione várias imagens para criar uma galeria</p>
+                        <div id="galeriaPreview" class="mt-3 sm:mt-4 flex flex-wrap gap-2 sm:gap-3 justify-center"></div>
+                    </div>
+                    <input type="hidden" id="galeria">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Especificações (uma por linha)</label>
+                    <textarea id="specs" rows="4" placeholder="Material: Papel couché&#10;Tamanho: A5&#10;Personalização: Disponível" class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-rosa focus:ring-4 focus:ring-rosa focus:ring-opacity-20 transition-all outline-none text-sm sm:text-base"></textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t-2 border-gray-100">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-rosa to-pink-500 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        Salvar Produto
+                    </button>
+                    <button type="button" onclick="fecharModal()" class="flex-1 bg-gray-100 text-gray-700 px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold hover:bg-gray-200 transition-all duration-300 text-sm sm:text-base">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-gray-100 py-4 sm:py-6 mt-6 sm:mt-12">
+        <div class="container mx-auto px-3 sm:px-4 text-center text-gray-600 text-sm sm:text-base">
+            <p>&copy; 2025 SÁ Papelaria. Painel Administrativo.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+    <script src="JS/supabase-config.js"></script>
+    <script src="JS/admin.js"></script>
+    <script>
+        // Fechar modal ao clicar no fundo
+        function fecharModalBackground(event) {
+            if (event.target.id === 'produtoModal') {
+                fecharModal();
+            }
+        }
+    </script>
+</body>
+</html>
