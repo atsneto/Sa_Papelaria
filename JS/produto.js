@@ -68,9 +68,21 @@ async function renderProdutoDetalhe() {
     document.querySelector('.produto-especificacoes').style.display = 'none';
   }
 
-  // Botão de compra
+  // Botão de compra - verificar login
   const botaoComprar = document.getElementById('botaoComprar');
-  botaoComprar.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Olá! Quero saber mais sobre: ' + produto.nome)}`;
+  botaoComprar.onclick = async (e) => {
+    e.preventDefault();
+    const user = await Auth.verificarLogin();
+    
+    if (!user) {
+      if (confirm('Você precisa estar logado para comprar. Deseja fazer login agora?')) {
+        window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+      }
+    } else {
+      const mensagem = `Olá! Sou ${user.user_metadata?.nome || user.email}. Quero comprar: ${produto.nome}`;
+      window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`, '_blank');
+    }
+  };
 
   console.log('Renderizando produtos relacionados...');
   // Produtos relacionados
@@ -103,7 +115,7 @@ function renderProdutosRelacionados(categoria, produtoIdAtual) {
         <img src="${p.img}" alt="${p.nome}">
         <h4>${p.nome}</h4>
         <p class="price">${p.preco}</p>
-        <a href="produto.html?id=${p.id}" class="btn ghost">Ver Produto</a>
+        <button onclick="verificarLoginCompra(${p.id}, '${p.nome.replace(/'/g, "\\'")}')" class="btn ghost">Comprar</button>
       </article>
     `).join('');
   } else {
@@ -119,7 +131,7 @@ function renderProdutosRelacionados(categoria, produtoIdAtual) {
         <img src="${p.img}" alt="${p.nome}">
         <h4>${p.nome}</h4>
         <p class="price">${p.preco}</p>
-        <a href="produto.html?id=${p.id}" class="btn ghost">Ver Produto</a>
+        <button onclick="verificarLoginCompra(${p.id}, '${p.nome.replace(/'/g, "\\'")}')" class="btn ghost">Comprar</button>
       </article>
     `).join('');
   }
