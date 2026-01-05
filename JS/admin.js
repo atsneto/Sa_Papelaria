@@ -4,6 +4,10 @@ let galeriaFiles = [];
 
 // Carregar produtos ao abrir a página
 document.addEventListener('DOMContentLoaded', async () => {
+  // Verificar se usuário é admin antes de carregar
+  const isAuthorized = await Auth.requireAdmin();
+  if (!isAuthorized) return;
+  
   await carregarProdutos();
   renderizarProdutos();
 });

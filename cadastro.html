@@ -212,18 +212,32 @@
             cadastroBtn.textContent = 'Cadastrando...';
             
             try {
-                const { data, error } = await clienteSupabase.auth.signUp({
+                // 1. Criar usuário no auth
+                const { data: authData, error: authError } = await clienteSupabase.auth.signUp({
                     email: email,
                     password: password,
-                    options: {
-                        data: {
-                            nome: nome,
-                            celular: celular
-                        }
-                    }
+                    phone: celular.replace(/\D/g, ''), // Salvar apenas números no campo phone nativo
                 });
 
-                if (error) throw error;
+                if (authError) throw authError;
+
+                // 2. Criar perfil na tabela perfis
+                const { data: perfilData, error: perfilError } = await clienteSupabase
+                    .from('perfis')
+                    .insert([{
+                        id: authData.user.id,
+                        nome: nome,
+                        celular: celular,
+                        role: 'cliente'
+                    }]);
+
+                if (perfilError) {
+                    console.error('Erro ao criar perfil:', perfilError);
+                    // Não bloqueamos o cadastro se falhar, mas logamos
+                }
+
+                console.log('Usuário cadastrado:', authData.user);
+                console.log('Perfil criado:', perfilData);
 
                 mostrarAlerta('Cadastro realizado com sucesso! Redirecionando...', 'success');
                 
