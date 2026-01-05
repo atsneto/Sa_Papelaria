@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="produto-acoes">
-                            <button id="botaoComprar" class="btn primary comprar-btn">Comprar via PIX</button>
+                            <a id="botaoComprar" class="btn primary comprar-btn" target="_blank">Comprar pelo WhatsApp</a>
                             <button class="btn ghost" onclick="window.history.back()">Voltar</button>
                         </div>
                     </div>
@@ -128,68 +128,10 @@
         </a>
     </div>
 
-    <!-- Modal PIX -->
-    <div id="modalPix" class="modal-pix">
-        <div class="modal-pix-content">
-            <span class="modal-pix-close" onclick="fecharModalPix()">&times;</span>
-            
-            <div id="pixLoading" class="pix-loading">
-                <div class="spinner"></div>
-                <p>Gerando código PIX...</p>
-            </div>
-            
-            <div id="pixContent" class="pix-content" style="display: none;">
-                <h2>Pagamento via PIX</h2>
-                <p class="pix-produto-nome" id="pixProdutoNome"></p>
-                <p class="pix-valor" id="pixValor"></p>
-                
-                <div class="pix-qrcode">
-                    <img id="pixQrCode" src="" alt="QR Code PIX">
-                </div>
-                
-                <div class="pix-codigo">
-                    <p class="pix-instrucao">Código PIX Copia e Cola:</p>
-                    <div class="pix-codigo-container">
-                        <input type="text" id="pixCodigoInput" readonly>
-                        <button class="btn-copiar" onclick="copiarCodigoPix()">
-                            <span id="btnCopiarTexto">Copiar</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="pix-status">
-                    <div class="pix-status-icon">
-                        <div class="pulse"></div>
-                    </div>
-                    <p id="pixStatus">Aguardando pagamento...</p>
-                </div>
-                
-                <div class="pix-instrucoes">
-                    <h3>Como pagar:</h3>
-                    <ol>
-                        <li>Abra o app do seu banco</li>
-                        <li>Escolha pagar com PIX</li>
-                        <li>Escaneie o QR Code ou cole o código</li>
-                        <li>Confirme o pagamento</li>
-                    </ol>
-                </div>
-                
-                <button class="btn ghost" onclick="fecharModalPix()">Cancelar</button>
-            </div>
-            
-            <div id="pixErro" class="pix-erro" style="display: none;">
-                <h2>Erro ao gerar PIX</h2>
-                <p id="pixMensagemErro"></p>
-                <button class="btn primary" onclick="fecharModalPix()">Fechar</button>
-            </div>
-        </div>
-    </div>
-
     <script src="https://unpkg.com/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
     <script src="JS/supabase-config.js"></script>
     <script src="JS/auth.js"></script>
     <script src="JS/script.js"></script>
-    <script src="JS/stripe-config.js"></script>
     <script src="JS/produto.js"></script>
 </body>
 </html>
