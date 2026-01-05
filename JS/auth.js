@@ -89,14 +89,19 @@ const Auth = {
 
     // Atualizar UI baseado no estado de autenticação
     async atualizarUI() {
-        const user = await this.verificarLogin();
-        const navMenu = document.querySelector('.nav');
+        // Prevenir execuções simultâneas
+        if (this._atualizandoUI) return;
+        this._atualizandoUI = true;
         
-        if (!navMenu) return;
+        try {
+            const user = await this.verificarLogin();
+            const navMenu = document.querySelector('.nav');
+            
+            if (!navMenu) return;
 
-        // Remover TODOS os botões de login/conta existentes
-        const existingAuthBtns = navMenu.querySelectorAll('.user-dropdown');
-        existingAuthBtns.forEach(btn => btn.remove());
+            // Remover TODOS os botões de login/conta existentes
+            const existingAuthBtns = navMenu.querySelectorAll('.user-dropdown');
+            existingAuthBtns.forEach(btn => btn.remove());
 
         if (user) {
             // Buscar nome e role do perfil
@@ -119,29 +124,46 @@ const Auth = {
             // Verificar se é admin
             const isAdmin = userRole === 'admin';
             
+            console.log('User role:', userRole, 'isAdmin:', isAdmin);
+            
             // Criar menu com botão admin se for admin
             let menuItems = '';
             
             if (isAdmin) {
-                menuItems += `
-                    <a href="admin.html" class="user-menu-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Admin
-                    </a>`;
-            }
+    menuItems += `
+        <button onclick="window.location.href='admin.html'" class="user-menu-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"
+                    stroke="currentColor" stroke-width="2"/>
+                <path d="M7 11V7C7 5.67 7.53 4.4 8.46 3.46
+                    9.4 2.53 10.67 2 12 2
+                    13.33 2 14.6 2.53 15.54 3.46
+                    16.47 4.4 17 5.67 17 7V11"
+                    stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Admin
+        </button>
+    `;
+}
             
             menuItems += `
-                <button onclick="Auth.logout()" class="user-menu-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Sair
-                </button>`;
+    <button onclick="Auth.logout()" class="user-menu-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 21H5C4.47 21 3.96 20.79 3.59 20.41
+                3.21 20.04 3 19.53 3 19V5
+                C3 4.47 3.21 3.96 3.59 3.59
+                3.96 3.21 4.47 3 5 3H9"
+                stroke="currentColor" stroke-width="2"/>
+            <path d="M16 17L21 12L16 7"
+                stroke="currentColor" stroke-width="2"/>
+            <path d="M21 12H9"
+                stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Sair
+    </button>
+`;
             
             // Usuário logado - mostrar dropdown com nome e menu
             const authHTML = `
@@ -197,6 +219,9 @@ const Auth = {
                 </div>
             `;
             navMenu.insertAdjacentHTML('beforeend', authHTML);
+        }
+        } finally {
+            this._atualizandoUI = false;
         }
     }
 };

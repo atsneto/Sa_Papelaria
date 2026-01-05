@@ -68,7 +68,7 @@ async function renderProdutoDetalhe() {
     document.querySelector('.produto-especificacoes').style.display = 'none';
   }
 
-  // Botão de compra - verificar login
+  // Botão de compra - verificar login e abrir modal PIX
   const botaoComprar = document.getElementById('botaoComprar');
   botaoComprar.onclick = async (e) => {
     e.preventDefault();
@@ -79,8 +79,8 @@ async function renderProdutoDetalhe() {
         window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
       }
     } else {
-      const mensagem = `Olá! Sou ${user.user_metadata?.nome || user.email}. Quero comprar: ${produto.nome}`;
-      window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`, '_blank');
+      // Abrir modal PIX
+      abrirModalPix(produto, user);
     }
   };
 
@@ -115,7 +115,7 @@ function renderProdutosRelacionados(categoria, produtoIdAtual) {
         <img src="${p.img}" alt="${p.nome}">
         <h4>${p.nome}</h4>
         <p class="price">${p.preco}</p>
-        <button onclick="verificarLoginCompra(${p.id}, '${p.nome.replace(/'/g, "\\'")}')" class="btn ghost">Comprar</button>
+        <button onclick="window.location.href='produto.html?id=${p.id}'" class="btn ghost">Ver Produto</button>
       </article>
     `).join('');
   } else {
@@ -131,10 +131,136 @@ function renderProdutosRelacionados(categoria, produtoIdAtual) {
         <img src="${p.img}" alt="${p.nome}">
         <h4>${p.nome}</h4>
         <p class="price">${p.preco}</p>
-        <button onclick="verificarLoginCompra(${p.id}, '${p.nome.replace(/'/g, "\\'")}')" class="btn ghost">Comprar</button>
+        <button onclick="window.location.href='produto.html?id=${p.id}'" class="btn ghost">Ver Produto</button>
       </article>
     `).join('');
   }
+}
+
+// Variáveis globais para controle do pagamento
+let currentPaymentId = null;
+let paymentCheckInterval = null;
+
+// Abrir modal PIX
+async function abrirModalPix(produto, usuario) {
+  const modal = document.getElementById('modalPix');
+  const loading = document.getElementById('pixLoading');
+  const content = document.getElementById('pixContent');
+  const erro = document.getElementById('pixErro');
+  
+  // Resetar modal
+  loading.style.display = 'block';
+  content.style.display = 'none';
+  erro.style.display = 'none';
+  modal.style.display = 'flex';
+  
+  try {
+    // Criar pagamento PIX
+    const pagamento = await StripeConfig.criarPagamentoPix(produto, {
+      email: usuario.email,
+      nome: usuario.user_metadata?.nome || 'Cliente'
+    });
+    
+    currentPaymentId = pagamento.payment_id;
+    
+    // Preencher dados do modal
+    document.getElementById('pixProdutoNome').textContent = produto.nome;
+    document.getElementById('pixValor').textContent = produto.preco;
+    document.getElementById('pixQrCode').src = pagamento.qr_code_url || `data:image/png;base64,${pagamento.qr_code}`;
+    document.getElementById('pixCodigoInput').value = pagamento.qr_code;
+    
+    // Mostrar conteúdo
+    loading.style.display = 'none';
+    content.style.display = 'block';
+    
+    // Iniciar verificação de pagamento
+    iniciarVerificacaoPagamento();
+    
+  } catch (error) {
+    console.error('Erro ao criar pagamento:', error);
+    
+    loading.style.display = 'none';
+    erro.style.display = 'block';
+    document.getElementById('pixMensagemErro').textContent = 
+      'Não foi possível gerar o código PIX. Por favor, tente novamente ou entre em contato conosco.';
+  }
+}
+
+// Fechar modal PIX
+function fecharModalPix() {
+  const modal = document.getElementById('modalPix');
+  modal.style.display = 'none';
+  
+  // Parar verificação de pagamento
+  if (paymentCheckInterval) {
+    clearInterval(paymentCheckInterval);
+    paymentCheckInterval = null;
+  }
+  
+  currentPaymentId = null;
+}
+
+// Copiar código PIX
+async function copiarCodigoPix() {
+  const codigo = document.getElementById('pixCodigoInput').value;
+  const btnTexto = document.getElementById('btnCopiarTexto');
+  
+  const sucesso = await StripeConfig.copiarCodigoPix(codigo);
+  
+  if (sucesso) {
+    btnTexto.textContent = '✓ Copiado!';
+    setTimeout(() => {
+      btnTexto.textContent = 'Copiar';
+    }, 2000);
+  } else {
+    alert('Não foi possível copiar. Por favor, copie manualmente.');
+  }
+}
+
+// Iniciar verificação automática do pagamento
+function iniciarVerificacaoPagamento() {
+  if (paymentCheckInterval) {
+    clearInterval(paymentCheckInterval);
+  }
+  
+  // Verificar a cada 3 segundos
+  paymentCheckInterval = setInterval(async () => {
+    if (!currentPaymentId) return;
+    
+    try {
+      const resultado = await StripeConfig.verificarPagamento(currentPaymentId);
+      
+      const statusElement = document.getElementById('pixStatus');
+      statusElement.textContent = StripeConfig.formatarStatus(resultado.status);
+      
+      if (resultado.status === 'succeeded') {
+        // Pagamento aprovado!
+        clearInterval(paymentCheckInterval);
+        paymentCheckInterval = null;
+        
+        statusElement.textContent = '✅ Pagamento aprovado!';
+        statusElement.style.color = '#10b981';
+        
+        setTimeout(() => {
+          fecharModalPix();
+          alert('Pagamento confirmado! Em breve você receberá mais informações por email.');
+          // Você pode redirecionar para uma página de confirmação
+          // window.location.href = 'confirmacao.html?payment=' + currentPaymentId;
+        }, 2000);
+        
+      } else if (resultado.status === 'canceled') {
+        // Pagamento rejeitado ou cancelado
+        clearInterval(paymentCheckInterval);
+        paymentCheckInterval = null;
+        
+        statusElement.textContent = '❌ Pagamento não aprovado';
+        statusElement.style.color = '#ef4444';
+      }
+      
+    } catch (error) {
+      console.error('Erro ao verificar pagamento:', error);
+    }
+  }, 3000);
 }
 
 // Inicializar página

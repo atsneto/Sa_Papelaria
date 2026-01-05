@@ -1,6 +1,9 @@
 # Node modules
 node_modules/
 
+# Environment variables
+.env
+
 # Build files
 CSS/tailwind-output.css
 
@@ -14,3 +17,4 @@ Thumbs.db
 *.swp
 *.swo
 *~
+.vercel

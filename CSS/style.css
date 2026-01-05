@@ -1087,3 +1087,269 @@ a { color: inherit; text-decoration: none; }
     .whatsapp-float a { width: 52px; height: 52px; }
     .whatsapp-float img { width: 24px; height: 24px; }
 }
+
+/* Modal PIX */
+.modal-pix {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-pix-content {
+    background-color: var(--branco);
+    margin: 5% auto;
+    padding: 32px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: slideDown 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-pix-close {
+    color: var(--cinza);
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-pix-close:hover,
+.modal-pix-close:focus {
+    color: var(--rosa-escuro);
+}
+
+.pix-loading {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.spinner {
+    border: 4px solid var(--rosa-suave);
+    border-top: 4px solid var(--rosa);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.pix-content {
+    text-align: center;
+}
+
+.pix-content h2 {
+    color: var(--rosa-escuro);
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+}
+
+.pix-produto-nome {
+    font-weight: 600;
+    color: var(--texto);
+    margin-bottom: 8px;
+}
+
+.pix-valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--rosa);
+    margin-bottom: 24px;
+}
+
+.pix-qrcode {
+    background: var(--branco);
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 24px;
+    border: 2px solid var(--rosa-suave);
+}
+
+.pix-qrcode img {
+    width: 250px;
+    height: 250px;
+    display: block;
+}
+
+.pix-codigo {
+    margin-bottom: 24px;
+}
+
+.pix-instrucao {
+    font-size: 0.9rem;
+    color: var(--cinza);
+    margin-bottom: 8px;
+}
+
+.pix-codigo-container {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.pix-codigo-container input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--rosa-suave);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: monospace;
+    background: var(--rosa-suave);
+    color: var(--texto);
+}
+
+.btn-copiar {
+    padding: 12px 24px;
+    background: var(--rosa);
+    color: var(--branco);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.btn-copiar:hover {
+    background: var(--rosa-escuro);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(246, 166, 193, 0.4);
+}
+
+.pix-status {
+    background: var(--rosa-suave);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.pix-status-icon {
+    position: relative;
+}
+
+.pulse {
+    width: 12px;
+    height: 12px;
+    background: var(--rosa);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+#pixStatus {
+    margin: 0;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+.pix-instrucoes {
+    background: var(--rosa-suave);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.pix-instrucoes h3 {
+    color: var(--rosa-escuro);
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.pix-instrucoes ol {
+    margin-left: 20px;
+}
+
+.pix-instrucoes li {
+    margin-bottom: 8px;
+    color: var(--texto);
+}
+
+.pix-erro {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.pix-erro h2 {
+    color: #ef4444;
+    margin-bottom: 16px;
+}
+
+.pix-erro p {
+    color: var(--cinza);
+    margin-bottom: 24px;
+}
+
+/* Responsivo Modal PIX */
+@media (max-width: 768px) {
+    .modal-pix-content {
+        margin: 10% auto;
+        padding: 24px;
+        width: 95%;
+    }
+    
+    .pix-qrcode img {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .pix-valor {
+        font-size: 1.5rem;
+    }
+    
+    .pix-codigo-container {
+        flex-direction: column;
+    }
+    
+    .btn-copiar {
+        width: 100%;
+    }
+}
