@@ -1,9 +1,6 @@
 // Configuração do Stripe - Frontend
 const StripeConfig = {
-  // Detectar ambiente: desenvolvimento ou produção
-  API_URL: window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/api' 
-    : 'https://sa-papelaria.vercel.app/api',
+  API_URL: 'http://localhost:3000/api',
   
   // Criar pagamento PIX
   async criarPagamentoPix(produto, usuario) {
@@ -35,7 +32,7 @@ const StripeConfig = {
       const response = await fetch(`${this.API_URL}/verificar-pagamento?payment_id=${paymentId}`);
       const data = await response.json();
       
-      if (!data.success) {
+      if (!data.success) {/
         throw new Error(data.error || 'Erro ao verificar pagamento');
       }
       
