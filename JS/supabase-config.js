@@ -30,7 +30,7 @@ async function carregarProdutos() {
     const { data, error } = await clienteSupabase
       .from('produtos')
       .select('*')
-      .order('id', { ascending: true });
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Erro ao carregar produtos:', error);

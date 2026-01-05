@@ -22,17 +22,13 @@ function renderProdutos(category = 'all') {
   `).join('');
 }
 
-// Render produtos resumido (página inicial - apenas 4 produtos)
+// Render produtos resumido (página inicial - apenas 4 produtos mais recentes)
 function renderProdutosResumido() {
   const grid = document.getElementById('produtosGrid');
   if (!grid) return;
   
-  const produtosResumidos = [
-    produtos.find(p => p.nome === 'Agenda Advogado'),
-    produtos.find(p => p.nome === 'Sacola Aniversário'),
-    produtos.find(p => p.nome === 'Lancheira Chá Revelação'),
-    produtos.find(p => p.nome === 'Topo de Bolo Personalizado')
-  ].filter(p => p);
+  // Pegar os 4 produtos mais recentes
+  const produtosResumidos = produtos.slice(0, 4);
   
   grid.innerHTML = produtosResumidos.map((p) => `
     <article class="produto">
